@@ -1,0 +1,49 @@
+zu tom_barnowsky_07.py - Tom Barnowsky - 05.12.2019
+
+Das Zeitarray im Skript startet erst bei 1 obwohl es bei 0 genauso funktionieren müsste.
+Ich musste leider feststellen, dass die Nullstellen der Polynoms bei t = 0 und bestimmten
+werten für R und I auf unterscheidlichen Geräten mit unterschiedlichen Versionen
+von Python und Numpy unterscheidliche (unter anderem auch Komplexe) Ergebnisse liefert.
+Um Fehler zu vermeiden habe ich diesen Fall ausgeschlossen indem das array bei 1 beginnt.
+
+# Uni PC Pool - PC 12, Intel(R) Core(TM) i5-4590 CPU @ 3.30GHz
+toba662b@pclp12:~ $ python3
+Python 3.6.9 (default, Nov  7 2019, 10:44:02) 
+[GCC 8.3.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import numpy as np
+>>> np.version.version
+'1.13.3'
+>>> R = 3
+>>> I = 10/1000
+>>> np.polynomial.Polynomial((I*0 - (4/3)*np.pi*(R**3), 0, np.pi*R, -np.pi/3)).roots()
+array([-3.        ,  5.99999998,  6.00000002])
+>>>
+
+# Mein PC, Intel(R) Core(TM) i5-4200M CPU @ 2.50GHz
+tomba@tomba-C-AU5-610:~ $ python3
+Python 3.6.9 (default, Nov  7 2019, 10:44:02) 
+[GCC 8.3.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import numpy as np
+>>> np.version.version
+'1.17.4'
+>>> R = 3
+>>> I = 10/1000
+>>> np.polynomial.Polynomial((I*0 - (4/3)*np.pi*(R**3), 0, np.pi*R, -np.pi/3)).roots()
+array([-3.+0.00000000e+00j,  6.-1.04857321e-07j,  6.+1.04857321e-07j])
+>>>
+
+# Raspberry Pi 3B+, ARMv7 Processor rev 4 (v7l)
+tomba@raspi2:~ $ python3
+Python 3.5.3 (default, Sep 27 2018, 17:25:39) 
+[GCC 6.3.0 20170516] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import numpy as np
+>>> np.version.version
+'1.12.1'
+>>> R = 3
+>>> I = 10/1000
+>>> np.polynomial.Polynomial((I*0 - (4/3)*np.pi*(R**3), 0, np.pi*R, -np.pi/3)).roots()
+array([-3.        ,  5.99999998,  6.00000002])
+>>>
