@@ -1,29 +1,41 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-''' Poisson-Statistik
+''' Poisson-Statistik - Tom Barnowsky - 18.12.19
 
     ?????????????? '''
 
 import numpy as np
-from scipy.stats import poisson
+from scipy import stats
 from matplotlib import pyplot as plt
 
-dat = np.loadtxt("PV.dat")
-#print(np.sqrt(len(dat)))
+dat = np.loadtxt("PV.dat", dtype = int)
 mean = np.mean(dat)
+std = np.std(dat)
 
-# AUS SCIPY DOCS
-x = np.arange(poisson.ppf(0.01, mean), poisson.ppf(0.99, mean))
-plt.plot(x, poisson.pmf(x , mean))
+hist, bins = np.histogram(dat, bins = dat.ptp())
 
-# Histogram ÜBER DATEN
-hist, bins = np.histogram(dat, bins = int(np.sqrt(len(dat))))
-center = (bins[:-1] + bins[1:])/2
-plt.errorbar(center, hist/len(dat), yerr = np.sqrt(hist)/len(dat))
+# -------- Terminal Ausgabe --------
+print("Poisson Verteilung\n\n\
+Mittelwert:         {0:14.10f}\n\
+Standardabweichung: {1:14.10f}".format(mean, std))
 
-# Eintragen Mittelwert
-plt.plot([mean, mean], [0,np.amax(hist)/1000+0.01])
+# --------  Matplotlib Ausgabe ---------
 
-# Zeigen
-plt.show()
+# ---- Figure ----
+fig, sub = plt.subplots(1)
+fig.suptitle("Poisson Verteilung                     ")
+fig.canvas.set_window_title("Poisson Verteilung")
+
+# ---- Plot ----
+sub.errorbar(bins[:-1], hist/len(dat), yerr = np.sqrt(hist)/len(dat),\
+        linestyle = "None", marker = 'x', capsize = 2, label = "Messwerte mit Unsicherheiten")
+sub.bar(bins, stats.poisson.pmf(bins, mean), color = 'r', label = "Poissonverteilung")
+sub.plot(bins, stats.norm.pdf(bins, mean, std), color = 'g', label = "Normalverteilung")
+sub.set_xlabel("Anzahl Zerfälle pro s")
+sub.set_ylabel("Relative Häufigkeit der Messung")
+
+fig.subplots_adjust(top=0.8)
+fig.legend()
+
+plt.show() # ZEIGE FENSTER
