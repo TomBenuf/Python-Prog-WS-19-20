@@ -3,7 +3,7 @@
 
 ''' Poisson-Statistik - Tom Barnowsky - 18.12.19
 
-    ?????????????? '''
+    Wertet Messwerte statistisch aus. '''
 
 import numpy as np
 from scipy import stats
