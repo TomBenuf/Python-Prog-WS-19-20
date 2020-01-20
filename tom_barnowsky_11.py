@@ -1,42 +1,43 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-''' Kugeltank 2 - Tom Barnowsky - 15.01.2020
+''' Übung 11 - Kugeltank 2 - Tom Barnowsky - 15.01.2020
 
-    Kugeltank wird numerisch abgeleitet und dargestellt. '''
+    Messwerte Kugeltank werden numerisch abgeleitet und dargestellt. '''
 
 import numpy as np
 from matplotlib import pyplot as plt
-import ableitung as abl
+import ableitung as abl # importiere eigene Ableitungs Funktion aus ableitung.py
 
-t, h = np.loadtxt('Kugeltank.dat', unpack = True, skiprows = 1)
-t /= 60
-h *= 100
+t, h = np.loadtxt('Kugeltank.dat', unpack = True, skiprows = 1) # lade Daten
+t /= 60     # Zeit in Minuten umrechnen
+h *= 100    # Höhe in Meter umrechnen
 
-m = abl.diff(t, h)
+m = abl.diff(t, h)  # Leite Daten numerisch ab
 
-grad = np.gradient(h, t[1])
+grad = np.gradient(h, t[1]) # Leite Daten numerisch ab mit Numpy Funktion
 
 # -------- Matplotlib Ausgabe --------
 
 # ---- Figure ----
 sub = [None, None]
-fig, sub[0] = plt.subplots(1)
-fig.suptitle("Differenzierung Kugeltank")
-fig.set_size_inches(8, 6)
-fig.canvas.set_window_title("Differenzierung Kugeltank")
+fig, sub[0] = plt.subplots(1)                               # Ein Subplot
+fig.suptitle("Differenzierung Kugeltank")                   # Überschrift
+fig.set_size_inches(8, 6)                                   # Fenstergröße
+fig.canvas.set_window_title("Differenzierung Kugeltank")    # Fenstertitel
 
 # ---- Plot 1 - Messwerte ----
-sub[0].plot(t, h, color = 'b', label = "Messwerte")
-sub[0].set_ylabel("Füllstand Tank /cm")
-sub[0].set_xlabel("Zeit /min")
+sub[0].plot(t, h, color = 'b', label = "Messwerte")         # plotte Messwerte
+sub[0].set_ylabel("Füllstand Tank /cm")                     # Y Bezeichnung
+sub[0].set_xlabel("Zeit /min")                              # X Bezeichnung
 
 # ---- Plot 2 - Ansteig ----
-sub[1] = sub[0].twinx()
-sub[1].plot(t, m, color = 'r', label = "Anstieg")
-sub[1].plot(t, grad)
-sub[1].set_ylabel("Anstieg /(cm/min)")
+sub[1] = sub[0].twinx()                                     # zweite y Achse im Plot
+# kein Unterschied zu erkennen
+sub[1].plot(t, m, color = 'r', label = "Anstieg")           # plotte Ableitung
+sub[1].plot(t, grad, color = 'r')                           # plotte Numpy Gradient
+sub[1].set_ylabel("Anstieg /(cm/min)")                      # Y Bezeichnung
 
-fig.legend()
-fig.tight_layout(rect = (0, 0, 1, 0.9))
-plt.show()
+fig.legend()                                                # zeige Legende
+fig.tight_layout(rect = (0, 0, 1, 0.9))                     # Fomatierung im Fenster
+plt.show()                                                  # ZEIGE FENSTER
